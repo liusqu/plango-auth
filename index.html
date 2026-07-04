@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>PlanGo 登录 · Sign in</title>
+<style>
+  :root { color-scheme: light; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+    background: #FAF7F2;
+    color: #2D2A26;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 2px 16px rgba(45, 42, 38, 0.08);
+    max-width: 400px;
+    width: 100%;
+    padding: 36px 28px;
+    text-align: center;
+  }
+  .wordmark { font-size: 22px; font-weight: 800; letter-spacing: 0.3px; color: #B45309; }
+  .icon { font-size: 44px; margin: 22px 0 6px; }
+  h1 { font-size: 19px; font-weight: 700; margin: 10px 0 8px; }
+  p { font-size: 14px; line-height: 1.6; color: #6B6458; }
+  .btn {
+    display: block;
+    margin: 24px 0 0;
+    padding: 15px 20px;
+    border-radius: 14px;
+    background: #F59E0B;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .btn:active { opacity: 0.85; }
+  .hint { font-size: 12px; color: #9C9284; margin-top: 14px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="wordmark">PlanGo</div>
+
+    <div id="state-ok" class="hidden">
+      <div class="icon">✈️</div>
+      <h1>邮箱验证成功</h1>
+      <p>Verified — one tap to finish.</p>
+      <a id="open-app" class="btn" href="#">打开 PlanGo 完成登录<br>Open PlanGo to sign in</a>
+      <p class="hint" id="device-hint"></p>
+    </div>
+
+    <div id="state-error" class="hidden">
+      <div class="icon">⏱</div>
+      <h1>链接已失效</h1>
+      <p id="error-detail">登录链接已过期或已被使用。请回到 PlanGo App 重新发送一封登录邮件。<br><br>This sign-in link has expired or was already used. Please go back to the PlanGo app and request a new email.</p>
+    </div>
+  </div>
+
+<script>
+(function () {
+  var search = window.location.search || "";
+  var hash = window.location.hash || "";
+  var qs = new URLSearchParams(search);
+  var hs = new URLSearchParams(hash.replace(/^#/, ""));
+
+  var errDesc = hs.get("error_description") || qs.get("error_description");
+  var errCode = hs.get("error_code") || qs.get("error_code") || hs.get("error") || qs.get("error");
+  var hasAuth = qs.get("code") || hs.get("access_token") || hs.get("refresh_token");
+
+  var ok = document.getElementById("state-ok");
+  var bad = document.getElementById("state-error");
+
+  if (hasAuth && !errCode) {
+    ok.classList.remove("hidden");
+    var target = "plango://auth/callback" + search + hash;
+    document.getElementById("open-app").setAttribute("href", target);
+
+    var isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (!isiOS) {
+      document.getElementById("device-hint").textContent =
+        "请在安装了 PlanGo 的 iPhone 上打开这封邮件 · Open this email on the iPhone that has PlanGo installed.";
+    } else {
+      // One automatic attempt — Safari asks "Open in PlanGo?".
+      // In-app browsers may ignore it; the button above is the fallback.
+      setTimeout(function () { window.location.href = target; }, 400);
+    }
+  } else {
+    bad.classList.remove("hidden");
+    if (errDesc) {
+      var d = document.getElementById("error-detail");
+      d.innerHTML += "<br><br><span style='color:#9C9284;font-size:12px'>(" +
+        errDesc.replace(/\+/g, " ").replace(/</g, "&lt;") + ")</span>";
+    }
+  }
+})();
+</script>
+</body>
+</html>
