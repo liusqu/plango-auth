@@ -4,65 +4,109 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>PlanGo 登录 · Sign in</title>
+<title>Plango 登录 · Sign in</title>
 <style>
-  :root { color-scheme: light; }
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Nunito:wght@400;700&display=swap');
+  /* Plango 赤陶虹 design tokens (mirror of iOS DesignTokens.swift / site palette) */
+  :root {
+    color-scheme: light;
+    --color-bg: #FAF8F3;          /* paper */
+    --color-surface: #FFFDF8;     /* card-warm */
+    --color-border: rgba(28, 26, 23, 0.11);
+    --color-primary: #1C1A17;     /* ink */
+    --color-accent: #C2603F;      /* terracotta */
+    --color-error: #B23A2E;       /* clay */
+    --color-text-main: #1C1A17;
+    --color-text-soft: rgba(28, 26, 23, 0.64);
+    --color-text-muted: rgba(28, 26, 23, 0.44);
+    --font-title: 'Playfair Display', Georgia, 'Songti SC', serif;
+    --font-body: 'Nunito', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+    --sp-xs: 8px; --sp-sm: 12px; --sp-md: 16px; --sp-lg: 24px; --sp-xl: 32px;
+    --radius-card: 16px; --radius-btn: 12px;
+    --transition-snappy: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
-    background: #FAF7F2;
-    color: #2D2A26;
+    font-family: var(--font-body);
+    background: var(--color-bg);
+    color: var(--color-text-main);
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: var(--sp-lg);
   }
   .card {
-    background: #FFFFFF;
-    border-radius: 20px;
-    box-shadow: 0 2px 16px rgba(45, 42, 38, 0.08);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-accent);
+    border-radius: var(--radius-card);
     max-width: 400px;
     width: 100%;
-    padding: 36px 28px;
+    padding: var(--sp-xl) 28px;
     text-align: center;
   }
-  .wordmark { font-size: 22px; font-weight: 800; letter-spacing: 0.3px; color: #B45309; }
-  .icon { font-size: 44px; margin: 22px 0 6px; }
-  h1 { font-size: 19px; font-weight: 700; margin: 10px 0 8px; }
-  p { font-size: 14px; line-height: 1.6; color: #6B6458; }
+  .wordmark {
+    font-family: var(--font-title);
+    font-size: 22px;
+    letter-spacing: 0.5px;
+    color: var(--color-text-main);
+  }
+  .glyph {
+    width: 56px; height: 56px;
+    margin: var(--sp-lg) auto var(--sp-sm);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-title);
+    font-size: 26px;
+    background: rgba(194, 96, 63, 0.10);   /* accent-tint */
+    color: var(--color-accent);
+  }
+  .glyph.err { background: rgba(178, 58, 46, 0.10); color: var(--color-error); }
+  h1 {
+    font-family: var(--font-title);
+    font-size: 21px;
+    font-weight: 600;
+    margin: var(--sp-sm) 0 var(--sp-xs);
+  }
+  p { font-size: 14px; line-height: 1.7; color: var(--color-text-soft); }
   .btn {
     display: block;
-    margin: 24px 0 0;
-    padding: 15px 20px;
-    border-radius: 14px;
-    background: #F59E0B;
-    color: #FFFFFF;
+    margin: var(--sp-lg) 0 0;
+    padding: 15px 20px;               /* ≥44pt touch target */
+    border-radius: var(--radius-btn);
+    background: var(--color-primary); /* ink primary,与 app 主按钮一致 */
+    color: #FFFDF8;
     font-size: 16px;
     font-weight: 700;
     text-decoration: none;
+    transition: transform var(--transition-snappy), opacity var(--transition-snappy);
   }
-  .btn:active { opacity: 0.85; }
-  .hint { font-size: 12px; color: #9C9284; margin-top: 14px; }
+  .btn:active { transform: scale(0.98); opacity: 0.9; }
+  .btn:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent); }
+  .hint { font-size: 12px; color: var(--color-text-muted); margin-top: var(--sp-md); }
   .hidden { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
 </style>
 </head>
 <body>
   <div class="card">
-    <div class="wordmark">PlanGo</div>
+    <div class="wordmark">Plango</div>
 
     <div id="state-ok" class="hidden">
-      <div class="icon">✈️</div>
+      <div class="glyph">✓</div>
       <h1>邮箱验证成功</h1>
       <p>Verified — one tap to finish.</p>
-      <a id="open-app" class="btn" href="#">打开 PlanGo 完成登录<br>Open PlanGo to sign in</a>
+      <a id="open-app" class="btn" href="#">打开 Plango 完成登录<br>Open Plango to sign in</a>
       <p class="hint" id="device-hint"></p>
     </div>
 
     <div id="state-error" class="hidden">
-      <div class="icon">⏱</div>
+      <div class="glyph err">!</div>
       <h1>链接已失效</h1>
-      <p id="error-detail">登录链接已过期或已被使用。请回到 PlanGo App 重新发送一封登录邮件。<br><br>This sign-in link has expired or was already used. Please go back to the PlanGo app and request a new email.</p>
+      <p id="error-detail">登录链接已过期或已被使用。请回到 Plango App 重新发送一封登录邮件。<br><br>This sign-in link has expired or was already used. Please go back to the Plango app and request a new email.</p>
     </div>
   </div>
 
@@ -88,9 +132,9 @@
     var isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     if (!isiOS) {
       document.getElementById("device-hint").textContent =
-        "请在安装了 PlanGo 的 iPhone 上打开这封邮件 · Open this email on the iPhone that has PlanGo installed.";
+        "请在安装了 Plango 的 iPhone 上打开这封邮件 · Open this email on the iPhone that has Plango installed.";
     } else {
-      // One automatic attempt — Safari asks "Open in PlanGo?".
+      // One automatic attempt — Safari asks "Open in Plango?".
       // In-app browsers may ignore it; the button above is the fallback.
       setTimeout(function () { window.location.href = target; }, 400);
     }
@@ -98,7 +142,7 @@
     bad.classList.remove("hidden");
     if (errDesc) {
       var d = document.getElementById("error-detail");
-      d.innerHTML += "<br><br><span style='color:#9C9284;font-size:12px'>(" +
+      d.innerHTML += "<br><br><span style='color:rgba(28,26,23,0.44);font-size:12px'>(" +
         errDesc.replace(/\+/g, " ").replace(/</g, "&lt;") + ")</span>";
     }
   }
