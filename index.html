@@ -6,107 +6,104 @@
 <meta name="robots" content="noindex">
 <title>Plango 登录 · Sign in</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Nunito:wght@400;700&display=swap');
-  /* Plango 赤陶虹 design tokens (mirror of iOS DesignTokens.swift / site palette) */
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap');
+  /* v4 提案书语言 — tokens 与 docs/design/td-redesign-v4/v4-proposal-axb.html 同源，零新 HEX */
   :root {
     color-scheme: light;
-    --color-bg: #FAF8F3;          /* paper */
-    --color-surface: #FFFDF8;     /* card-warm */
-    --color-border: rgba(28, 26, 23, 0.11);
-    --color-primary: #1C1A17;     /* ink */
-    --color-accent: #C2603F;      /* terracotta */
-    --color-error: #B23A2E;       /* clay */
-    --color-text-main: #1C1A17;
-    --color-text-soft: rgba(28, 26, 23, 0.64);
-    --color-text-muted: rgba(28, 26, 23, 0.44);
-    --font-title: 'Playfair Display', Georgia, 'Songti SC', serif;
-    --font-body: 'Nunito', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
-    --sp-xs: 8px; --sp-sm: 12px; --sp-md: 16px; --sp-lg: 24px; --sp-xl: 32px;
-    --radius-card: 16px; --radius-btn: 12px;
-    --transition-snappy: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --bg:#FAF8F3; --surface:#F3EFE6; --card:#FFFDF8;
+    --ink:#1C1A17;
+    --ink-soft:rgba(28,26,23,.64); --ink-muted:rgba(28,26,23,.44); --ink-faint:rgba(28,26,23,.28);
+    --hair:rgba(28,26,23,.11);
+    --accent:#C2603F; --clay:#B23A2E;
+    --serif:'Playfair Display','Noto Serif SC','Songti SC','STSong',Georgia,serif;
+    --sans:'Nunito',-apple-system,'PingFang SC','Hiragino Sans GB',system-ui,sans-serif;
+    --mono:'Geist Mono',ui-monospace,'SF Mono',Menlo,monospace;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
   body {
-    font-family: var(--font-body);
-    background: var(--color-bg);
-    color: var(--color-text-main);
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--ink);
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--sp-lg);
+    padding: 32px 28px;
   }
-  .card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-accent);
-    border-radius: var(--radius-card);
-    max-width: 400px;
-    width: 100%;
-    padding: var(--sp-xl) 28px;
-    text-align: center;
+  /* 零框零徽章：内容直接坐在纸面上，发丝线分隔 */
+  .page { max-width: 360px; width: 100%; text-align: left; }
+  .kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2.2px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
   }
-  .wordmark {
-    font-family: var(--font-title);
-    font-size: 22px;
-    letter-spacing: 0.5px;
-    color: var(--color-text-main);
-  }
-  .glyph {
-    width: 56px; height: 56px;
-    margin: var(--sp-lg) auto var(--sp-sm);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-title);
-    font-size: 26px;
-    background: rgba(194, 96, 63, 0.10);   /* accent-tint */
-    color: var(--color-accent);
-  }
-  .glyph.err { background: rgba(178, 58, 46, 0.10); color: var(--color-error); }
   h1 {
-    font-family: var(--font-title);
-    font-size: 21px;
-    font-weight: 600;
-    margin: var(--sp-sm) 0 var(--sp-xs);
-  }
-  p { font-size: 14px; line-height: 1.7; color: var(--color-text-soft); }
-  .btn {
-    display: block;
-    margin: var(--sp-lg) 0 0;
-    padding: 15px 20px;               /* ≥44pt touch target */
-    border-radius: var(--radius-btn);
-    background: var(--color-primary); /* ink primary,与 app 主按钮一致 */
-    color: #FFFDF8;
-    font-size: 16px;
+    font-family: var(--serif);
+    font-size: 27px;
+    line-height: 1.35;
     font-weight: 700;
+    letter-spacing: .5px;
+    margin-top: 14px;
+  }
+  p { font-size: 14px; line-height: 1.75; color: var(--ink-soft); margin-top: 12px; }
+  .cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 52px;
+    margin-top: 28px;
+    border-radius: 14px;
+    background: var(--ink);
+    color: var(--card);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .3px;
     text-decoration: none;
-    transition: transform var(--transition-snappy), opacity var(--transition-snappy);
+    transition: transform .2s cubic-bezier(.4,0,.2,1), opacity .2s cubic-bezier(.4,0,.2,1);
   }
-  .btn:active { transform: scale(0.98); opacity: 0.9; }
-  .btn:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent); }
-  .hint { font-size: 12px; color: var(--color-text-muted); margin-top: var(--sp-md); }
+  .cta:active { transform: scale(.98); opacity: .9; }
+  .cta:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
+  .cta-sub {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    margin-top: 9px;
+    line-height: 1.7;
+  }
+  .status-line {
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid var(--hair);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .status-line .dot { width: 7px; height: 7px; border-radius: 99px; background: var(--clay); align-self: center; flex: none; }
+  .status-line .s-main { font-size: 14.5px; font-weight: 600; }
+  .err-detail { font-size: 12.5px; color: var(--ink-muted); margin-top: 8px; line-height: 1.7; }
   .hidden { display: none; }
-  @media (prefers-reduced-motion: reduce) {
-    .btn { transition: none; }
-  }
+  @media (prefers-reduced-motion: reduce) { .cta { transition: none; } }
 </style>
 </head>
 <body>
-  <div class="card">
-    <div class="wordmark">Plango</div>
+  <div class="page">
+    <div class="kicker">Plango</div>
 
     <div id="state-ok" class="hidden">
-      <div class="glyph">✓</div>
       <h1>邮箱验证成功</h1>
       <p>Verified — one tap to finish.</p>
-      <a id="open-app" class="btn" href="#">打开 Plango 完成登录<br>Open Plango to sign in</a>
-      <p class="hint" id="device-hint"></p>
+      <a id="open-app" class="cta" href="#">打开 Plango 完成登录</a>
+      <div class="cta-sub" id="device-hint">Open Plango to sign in</div>
     </div>
 
     <div id="state-error" class="hidden">
-      <div class="glyph err">!</div>
       <h1>链接已失效</h1>
-      <p id="error-detail">登录链接已过期或已被使用。请回到 Plango App 重新发送一封登录邮件。<br><br>This sign-in link has expired or was already used. Please go back to the Plango app and request a new email.</p>
+      <p>登录链接已过期或已被使用。请回到 Plango App 重新发送一封登录邮件。</p>
+      <p>This sign-in link has expired or was already used. Please go back to the Plango app and request a new email.</p>
+      <div class="status-line"><span class="dot"></span><span class="s-main">需要重新发一封</span></div>
+      <div class="err-detail" id="error-detail"></div>
     </div>
   </div>
 
@@ -141,9 +138,8 @@
   } else {
     bad.classList.remove("hidden");
     if (errDesc) {
-      var d = document.getElementById("error-detail");
-      d.innerHTML += "<br><br><span style='color:rgba(28,26,23,0.44);font-size:12px'>(" +
-        errDesc.replace(/\+/g, " ").replace(/</g, "&lt;") + ")</span>";
+      document.getElementById("error-detail").textContent =
+        "(" + errDesc.replace(/\+/g, " ") + ")";
     }
   }
 })();
